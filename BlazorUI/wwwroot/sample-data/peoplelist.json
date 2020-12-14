@@ -1,0 +1,26 @@
+﻿[
+  {
+    "Title": "MR",
+    "FirstName": "John",
+    "LastName": "Smith",
+    "Email": "johnsmith@gmail.com",
+    "Telephone": "085-123-4567",
+    "DateOfBirth": "1990-01-01"
+  },
+  {
+    "Title": "MRS",
+    "FirstName": "Jane",
+    "LastName": "Doe",
+    "Email": "janedoe@gmail.com",
+    "Telephone": "087-321-7654",
+    "DateOfBirth": "1995-06-15"
+  },
+  {
+    "Title": "MR",
+    "FirstName": "Peter",
+    "LastName": "Parker",
+    "Email": "peterparker@gmail.com",
+    "Telephone": "086-231-7564",
+    "DateOfBirth": "1979-04-24"
+  }
+]

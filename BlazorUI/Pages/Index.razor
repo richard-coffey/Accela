@@ -1,0 +1,101 @@
+﻿@page "/"
+@inject HttpClient Http;
+@inject NavigationManager urihelper;
+@inject IJSRuntime JsRuntime;
+
+<div class="container-lg">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-8"><h2>People Index</h2></div>
+                </div>
+            </div>
+            @if (peopleList == null)
+            {
+                <p><em>No people found!</em></p>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Telephone</th>
+                            <th>D.O.B</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var person in peopleList)
+                        {
+                            <tr>
+                                <td>@person.Title</td>
+                                <td>@person.FirstName</td>
+                                <td>@person.LastName</td>
+                                <td>@person.Email</td>
+                                <td>@person.Telephone</td>
+                                <td>@person.DateOfBirth.ToShortDateString()</td>
+                                <td>
+                                    <a class="edit" title="Edit" data-toggle="tooltip"><span class="oi oi-pencil" aria-hidden="true"></span></a>
+                                    <a id="editPerson" class="confirmedit" title="Confirm Edit" data-toggle="tooltip"><span class="oi oi-check" aria-hidden="true"></span></a>
+                                    <a class="delete" title="Delete" data-toggle="tooltip" @onclick="@(async () => await DeletePerson(person.PersonId))"><span class="oi oi-delete" aria-hidden="true"></span></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private List<Accela.BlazorUI.Person> peopleList = new List<Accela.BlazorUI.Person>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        string ServiceEndpointGetAll = "https://localhost:44389/api/people/getall";
+
+        try
+        {
+            peopleList = await Http.GetFromJsonAsync<List<Accela.BlazorUI.Person>>(ServiceEndpointGetAll);
+        }
+        catch (Exception ex)
+        {
+            string err = ex.Message;
+        }
+    }
+
+    private async Task DeletePerson(int personId)
+    {
+        bool confirmed = await JsRuntime.InvokeAsync<bool>("confirm", "Are you sure you wish to delete this person?");
+        if (confirmed)
+        {
+            string ServiceEndpointRemovePerson = "https://localhost:44389/api/people/deleteperson";
+
+            await Http.DeleteAsync($"{ServiceEndpointRemovePerson}/{personId}");
+
+            urihelper.NavigateTo("/", true);
+        }
+    }
+
+    private async Task EditPerson(Accela.BlazorUI.Person person)
+    {
+        string ServiceEndpointEditPerson = "https://localhost:44389/api/people/editperson";
+
+        await Http.PutAsJsonAsync(ServiceEndpointEditPerson, person);
+    }
+
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
+        public async Task EditPerson()
+        {
+            await JSRuntime.InvokeVoidAsync("editPerson", "JS function called from .NET");
+        }
+
+}

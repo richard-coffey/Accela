@@ -1,0 +1,88 @@
+﻿@page "/add-person"
+@using System.Text.Json
+@using System.Net.Http
+@inject HttpClient Http;
+@inject NavigationManager urihelper;
+
+<div class="card m-3">
+    <h4 class="card-header">Add A Person</h4>
+    <div class="card-body">
+        <EditForm EditContext="@editContext" OnValidSubmit="HandleValidSubmit" @onreset="HandleReset">
+            <DataAnnotationsValidator />
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Title</label>
+                    <InputSelect @bind-Value="model.Title" class="form-control">
+                        <option value=""></option>
+                        <option value="Mr">Mr</option>
+                        <option value="Mrs">Mrs</option>
+                        <option value="Miss">Miss</option>
+                        <option value="Ms">Ms</option>
+                    </InputSelect>
+                    <ValidationMessage For="@(() => model.Title)" />
+                </div>
+                <div class="form-group col-5">
+                    <label>First Name</label>
+                    <InputText @bind-Value="model.FirstName" class="form-control" />
+                    <ValidationMessage For="@(() => model.FirstName)" />
+                </div>
+                <div class="form-group col-5">
+                    <label>Last Name</label>
+                    <InputText @bind-Value="model.LastName" class="form-control" />
+                    <ValidationMessage For="@(() => model.LastName)" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col">
+                    <label>Phone</label>
+                    <InputText @bind-Value="model.Telephone" class="form-control" />
+                    <ValidationMessage For="@(() => model.Telephone)" />
+                </div>
+                <div class="form-group col">
+                    <label>Email</label>
+                    <InputText @bind-Value="model.Email" class="form-control" />
+                    <ValidationMessage For="@(() => model.Email)" />
+                </div>
+                <div class="form-group col">
+                    <label>Date of Birth</label>
+                    <InputDate @bind-Value="model.DateOfBirth" class="form-control" format-value="yyyy-MM-dd" />
+                    <ValidationMessage For="@(() => model.DateOfBirth)" />
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mr-1" @onclick="@AddPerson">Submit</button>
+                <button type="reset" class="btn btn-secondary">Cancel</button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code { private Accela.BlazorUI.Person model = new Accela.BlazorUI.Person();
+
+    private async Task AddPerson()
+    {
+        {
+            string ServiceEndpoint = "https://localhost:44389/api/people/addperson";
+
+            await Http.PostAsJsonAsync(ServiceEndpoint, model);
+
+            urihelper.NavigateTo("/");
+        }
+    }
+
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(model);
+    }
+
+    private void HandleValidSubmit()
+    {
+        var modelJson = JsonSerializer.Serialize(model, new JsonSerializerOptions { WriteIndented = true });
+    }
+
+    private void HandleReset()
+    {
+        editContext = new EditContext(model);
+    } }
