@@ -1,6 +1,6 @@
 # Accela
 
-Instructions: Use Visual Studio 2019 to run the solution. The Web API and BlazorUI projects need to be both running in order fort he app to work correctly. The path to the database in the Connection string is assuming a path of C://Acella/…
+Instructions: Use Visual Studio 2019 to run the solution. The Web API and BlazorUI projects need to be both running in order for the app to work correctly. The path to the database in the Connection string is assuming a path of C://Acella/…
 
 Technologies: .NET Core 3.1, Entity Framework Core, Web API, Blazor, LocalDb, XUnit, Postman.
 
