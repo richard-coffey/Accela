@@ -12,4 +12,4 @@ For the frontend, I used Blazor, a new technology from Microsoft to allow the us
 
 The Web API service was then injected into the Startup.cs file in the Blazor project to allow it access to the CRUD controller methods I had made on the api service (add, edit delete, get all etc…)
 
-Testing: A separate text project was used to test the Web API methods. I used XUnit for this. I then created some dummy data to be inserted into the database and then removed after tests were completed. Postman was also used to verify that Web API calls.
+Testing: A separate text project was used to test the Web API methods. I used XUnit for this. I then created some dummy data to be inserted into the database and then removed after tests were completed. Postman was also used to verify the Web API calls.
